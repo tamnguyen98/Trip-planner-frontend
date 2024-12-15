@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { StrictModeDroppable } from '../StrictModeDroppable';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { PinItem } from './PinItem';
 import type { Pin } from '../../types';
+import { StrictModeDroppable } from '../StrictModeDroppable';
 
 interface Props {
   pins: Pin[];
@@ -41,7 +41,6 @@ export const PinsList = ({ pins, onChange }: Props) => {
       images: [],
       rating: 0
     };
-    console.log(newPin.id);
     onChange([...pins, newPin]);
   }, [pins, onChange]);
 

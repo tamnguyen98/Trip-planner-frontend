@@ -9,7 +9,7 @@ export const Header = ({ isLoggedIn = false }) => {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Plane className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-blue-600">PlanPals</span>
+            <span className="text-xl font-bold text-blue-600">TravelGuide</span>
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">

@@ -12,7 +12,7 @@ interface PinItemProps {
 
 export const PinItem = React.memo(({ pin, index, onUpdate, onRemove }: PinItemProps) => {
   return (
-    <Draggable draggableId={pin.id} index={index} key={pin.id}>
+    <Draggable draggableId={pin.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
