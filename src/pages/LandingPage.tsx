@@ -30,7 +30,9 @@ export const LandingPage = () => {
           <p className="text-xl text-white/90 mb-12">
             Plan, share, and explore incredible travel itineraries created by travelers like you
           </p>
-          <SearchBar />
+          <div className="flex justify-center items-center min-v-screen">
+            <SearchBar />
+          </div>
         </div>
       </div>
 
