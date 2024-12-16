@@ -24,6 +24,8 @@ export interface Itinerary {
   author: User;
   fromLocation: Location;
   toLocation: Location;
+  startDate: string;
+  endDate: string;
   pins: Pin[];
   visibility: 'private' | 'public' | 'listed';
   sharedWith: string[];

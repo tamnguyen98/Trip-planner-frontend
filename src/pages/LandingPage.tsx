@@ -1,9 +1,22 @@
 import React from 'react';
 import { Header } from '../components/Header';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
 import { SearchBar } from '../components/SearchBar';
 import { Globe2, Map, Share2, Star } from 'lucide-react';
+import { ItineraryTileCard } from '../components/search/ItineraryTileCard';
+
+
+interface FeatureCardProps {
+  icon: React.ReactNode; // `React.ReactNode` allows any valid JSX (e.g., an icon)
+  title: string;         // `title` is a string
+  description: string;   // `description` is a string
+}
+
 
 export const LandingPage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -50,8 +63,11 @@ export const LandingPage = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Popular Itineraries</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
-              <ItineraryCard key={i} />
-            ))}
+            <ItineraryTileCard
+              key={i}
+              onClick={() => navigate(`/itinerary/${i}`)}
+            />
+          ))}
           </div>
         </div>
       </div>
@@ -59,35 +75,10 @@ export const LandingPage = () => {
   );
 };
 
-const FeatureCard = ({ icon, title, description }) => (
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => (
   <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
     <div className="mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
     <p className="text-gray-600">{description}</p>
-  </div>
-);
-
-const ItineraryCard = () => (
-  <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-    <img
-      src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b"
-      alt="City view"
-      className="w-full h-48 object-cover"
-    />
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold">Paris to London</h3>
-        <div className="flex items-center">
-          <Star className="h-4 w-4 text-yellow-400 fill-current" />
-          <span className="ml-1 text-sm text-gray-600">4.8</span>
-        </div>
-      </div>
-      <p className="text-sm text-gray-600 mb-4">7 days of culture, history, and adventure</p>
-      <div className="flex items-center text-sm text-gray-500">
-        <span>By John Doe</span>
-        <span className="mx-2">•</span>
-        <span>12 Pins</span>
-      </div>
-    </div>
   </div>
 );

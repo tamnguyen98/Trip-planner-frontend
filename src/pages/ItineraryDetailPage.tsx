@@ -4,6 +4,7 @@ import { Header } from '../components/Header';
 import { ItineraryHeader } from '../components/itinerary/ItineraryHeader';
 import { PinCard } from '../components/itinerary/PinCard';
 import { CommentSection } from '../components/comments/CommentSection';
+import { TravelTypeSelector } from '../components/itinerary/TravelTypeSelector';
 
 // Mock data - replace with actual API call
 const mockItinerary = {
@@ -19,7 +20,8 @@ const mockItinerary = {
       description: 'Ancient Buddhist temple in Asakusa',
       location: { city: 'Tokyo', country: 'Japan' },
       images: ['https://images.unsplash.com/photo-1545569341-9eb8b30979d9'],
-      rating: 4.8
+      rating: 4.8,
+      
     },
     {
       id: '2',
@@ -42,7 +44,8 @@ const mockItinerary = {
     }
   ],
   createdAt: new Date('2024-03-15'),
-  updatedAt: new Date('2024-03-22')
+  updatedAt: new Date('2024-03-22'),
+  travelType: 'Air'
 };
 
 export const ItineraryDetailPage = () => {

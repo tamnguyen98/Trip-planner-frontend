@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { SearchBar } from '../components/SearchBar';
 import { SearchFilters } from '../components/search/SearchFilters';
-import { SearchResultCard } from '../components/search/SearchResultCard';
+import { ItineraryTileCard } from '../components/search/ItineraryTileCard';
 
 export const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
@@ -42,7 +42,7 @@ export const SearchResultsPage = () => {
         {/* Results Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <SearchResultCard
+            <ItineraryTileCard
               key={i}
               onClick={() => navigate(`/itinerary/${i}`)}
             />

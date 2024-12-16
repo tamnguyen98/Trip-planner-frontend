@@ -32,7 +32,10 @@ export const ItineraryForm = ({ itinerary, onChange }: Props) => {
               value={itinerary.fromLocation?.city || ''}
               onChange={(e) => onChange({
                 ...itinerary,
-                fromLocation: { ...itinerary.fromLocation, city: e.target.value }
+                fromLocation: {
+                  city: e.target.value,
+                  country: itinerary.fromLocation?.country ?? '' // Ensure country is valid
+                }
               })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               placeholder="Departure city"
@@ -45,7 +48,11 @@ export const ItineraryForm = ({ itinerary, onChange }: Props) => {
               value={itinerary.toLocation?.city || ''}
               onChange={(e) => onChange({
                 ...itinerary,
-                toLocation: { ...itinerary.toLocation, city: e.target.value }
+                toLocation: {
+                  city: e.target.value,
+                  country: itinerary.toLocation?.country ?? '' // Ensure country is valid
+                }
+
               })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               placeholder="Destination city"

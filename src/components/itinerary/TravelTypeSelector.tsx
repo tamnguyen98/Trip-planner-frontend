@@ -12,6 +12,35 @@ const TRAVEL_TYPES = [
   { icon: Ship, label: 'Sea' }
 ] as const;
 
+// Function to return the icon based on the label
+const getTravelIcon = (label: string) => {
+  switch (label) {
+    case 'Air':
+      return Plane; // Returns the Plane icon
+    case 'Land':
+      return Train; // Returns the Train icon
+    case 'Sea':
+      return Ship; // Returns the Ship icon
+    default:
+      return null; // Fallback if label doesn't match
+  }
+};
+
+export const ConvertTravelLabelToIcon = ({ label }: { label: string }) => {
+  const Icon = getTravelIcon(label);
+
+  return (
+    <div>
+      {Icon ? (
+        <Icon className="h-6 w-6 text-blue-600" /> // Render the icon
+      ) : (
+        <span>No icon found</span> // Fallback for invalid label
+      )}
+    </div>
+  );
+};
+
+
 export const TravelTypeSelector = ({ value, onChange }: Props) => {
   return (
     <div>

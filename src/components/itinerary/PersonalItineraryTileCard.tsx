@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin, Calendar, Clock } from 'lucide-react';
 
-interface ItineraryCardProps {
+interface PersonalItineraryTileCardProps {
   title?: string;
   fromTo?: string;
   dates?: string;
@@ -13,7 +13,7 @@ interface ItineraryCardProps {
   onDelete?: () => void;
 }
 
-export const ItineraryCard: React.FC<ItineraryCardProps> = ({
+export const PersonalItineraryTileCard: React.FC<PersonalItineraryTileCardProps> = ({
   title = 'Tokyo Adventure',
   fromTo = 'Tokyo → Kyoto',
   dates = 'Mar 15 - Mar 22, 2024',

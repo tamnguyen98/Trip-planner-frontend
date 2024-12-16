@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { SearchBar } from '../components/SearchBar';
-import { ItineraryCard } from '../components/itinerary/ItineraryCard';
+import { PersonalItineraryTileCard } from '../components/itinerary/PersonalItineraryTileCard';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export const HomePage = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <ItineraryCard 
+            <PersonalItineraryTileCard 
               key={i}
               onClick={() => handleView(i.toString())}
               onEdit={() => handleEdit(i.toString())}

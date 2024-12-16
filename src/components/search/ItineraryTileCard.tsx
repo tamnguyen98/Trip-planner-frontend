@@ -1,7 +1,8 @@
 import React from 'react';
 import { MapPin, Star, User, Clock } from 'lucide-react';
+import { ConvertTravelLabelToIcon  } from '../itinerary/TravelTypeSelector';
 
-interface SearchResultCardProps {
+interface ItineraryTilecardProps {
   title?: string;
   rating?: number;
   fromTo?: string;
@@ -10,9 +11,10 @@ interface SearchResultCardProps {
   author?: string;
   imageUrl?: string;
   onClick?: () => void;
+  travelType?: string;
 }
 
-export const SearchResultCard: React.FC<SearchResultCardProps> = ({
+export const ItineraryTileCard: React.FC<ItineraryTilecardProps> = ({
   title = 'Tokyo Explorer',
   rating = 4.8,
   fromTo = 'Tokyo → Kyoto',
@@ -20,6 +22,7 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
   duration = '7 days',
   author = 'John Doe',
   imageUrl = 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b',
+  travelType = 'Air',
   onClick
 }) => (
   <div 
@@ -39,7 +42,7 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
 
     <div className="p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="text-lg font-semibold">{title}<ConvertTravelLabelToIcon label="Air" /></h3>
         <div className="flex items-center">
           <Star className="h-4 w-4 text-yellow-400 fill-current" />
           <span className="ml-1 text-sm text-gray-600">{rating}</span>
