@@ -24,23 +24,26 @@ export const ItineraryEditorPage = () => {
   }, []);
 
   const handleSave = async () => {
-    try {
-      const url = isEditMode 
-        ? `http://localhost:3000/api/itineraries/${id}`
-        : 'http://localhost:3000/api/itineraries';
+    // try {
+    //   const url = isEditMode 
+    //     ? `http://localhost:3000/api/itineraries/${id}`
+    //     : 'http://localhost:3000/api/itineraries';
       
-      const response = await fetch(url, {
-        method: isEditMode ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itinerary)
-      });
+    //   const response = await fetch(url, {
+    //     method: isEditMode ? 'PUT' : 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(itinerary)
+    //   });
       
-      if (response.ok) {
-        navigate('/home');
-      }
-    } catch (error) {
-      console.error('Failed to save itinerary:', error);
-    }
+    //   if (response.ok) {
+    //     navigate('/home');
+    //   }
+    // } catch (error) {
+    //   console.error('Failed to save itinerary:', error);
+    // }
+
+    // debug
+    console.log(itinerary);
   };
 
   const handleDelete = async () => {
