@@ -24,8 +24,8 @@ export interface Itinerary {
   author: User;
   fromLocation: Location;
   toLocation: Location;
-  startDate: string;
-  endDate: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   pins: Pin[];
   visibility: 'private' | 'public' | 'listed';
   sharedWith: string[];
@@ -33,7 +33,7 @@ export interface Itinerary {
   comments: Comment[];
   createdAt: Date;
   updatedAt: Date;
-  travelType: string;
+  travelType: string | undefined;
 }
 
 export interface Comment {

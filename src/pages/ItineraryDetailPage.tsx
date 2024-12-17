@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { ItineraryHeader } from '../components/itinerary/ItineraryHeader';
 import { PinCard } from '../components/itinerary/PinCard';
 import { CommentSection } from '../components/comments/CommentSection';
-import { TravelTypeSelector } from '../components/itinerary/TravelTypeSelector';
+import { useItinerary } from '../hooks/useItinerary';
+import type { Itinerary } from '../types';
 
-// Mock data - replace with actual API call
+// Mock data for development - remove when API is ready
 const mockItinerary = {
   id: '1',
   title: 'Tokyo Adventure',
@@ -20,8 +21,7 @@ const mockItinerary = {
       description: 'Ancient Buddhist temple in Asakusa',
       location: { city: 'Tokyo', country: 'Japan' },
       images: ['https://images.unsplash.com/photo-1545569341-9eb8b30979d9'],
-      rating: 4.8,
-      
+      rating: 4.8
     },
     {
       id: '2',
@@ -44,30 +44,120 @@ const mockItinerary = {
     }
   ],
   createdAt: new Date('2024-03-15'),
+  endDate: new Date('2024-03-22'),
+  startDate: new Date('2024-03-15'),
   updatedAt: new Date('2024-03-22'),
   travelType: 'Air'
 };
 
 export const ItineraryDetailPage = () => {
   const { id } = useParams();
+  const { loading: apiLoading, error, getItinerary, addComment, shareItinerary } = useItinerary();
+  const [itinerary, setItinerary] = useState<Itinerary | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleShare = () => {
-    // Implement share functionality
-    console.log('Share itinerary:', id);
+  useEffect(() => {
+    const fetchItinerary = async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        setLoading(true);
+        // For development, simulate API call with mock data
+        // In production, uncomment the following line and remove the setTimeout
+        // const data = await getItinerary(id);
+        
+        // Simulate API call with mock data
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setItinerary(mockItinerary);
+      } catch (error) {
+        console.error('Failed to fetch itinerary:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchItinerary();
+  }, [id, getItinerary]);
+
+  const handleShare = async () => {
+    if (!itinerary) return;
+
+    const emails = window.prompt('Enter email addresses (comma-separated)')?.split(',').map(email => email.trim());
+    if (!emails || emails.length === 0) return;
+
+    const success = await shareItinerary(itinerary.id, emails, 'view');
+    if (success) {
+      alert('Itinerary shared successfully!');
+    }
   };
 
-  const handleAddComment = (content: string) => {
-    // Implement add comment functionality
-    console.log('Add comment:', content);
+  const handleAddComment = async (content: string) => {
+    if (!itinerary) return;
+
+    const newComment = await addComment(itinerary.id, content);
+    if (newComment && itinerary) {
+      setItinerary({
+        ...itinerary,
+        comments: [...itinerary.comments, newComment]
+      });
+    }
   };
 
+  // Show loading state while fetching data
+  if (loading || apiLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header isLoggedIn={true} />
+        <div className="pt-16 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading itinerary...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if there's an error
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header isLoggedIn={true} />
+        <div className="pt-16 flex items-center justify-center min-h-screen">
+          <div className="text-center text-red-600">
+            <p className="text-xl">Error loading itinerary</p>
+            <p className="mt-2">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show not found state if no itinerary and not loading
+  if (!itinerary && !loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header isLoggedIn={true} />
+        <div className="pt-16 flex items-center justify-center min-h-screen">
+          <div className="text-center text-gray-600">
+            <p className="text-xl">Itinerary not found</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show itinerary content when data is available
   return (
     <div className="min-h-screen bg-gray-50">
       <Header isLoggedIn={true} />
       
       <div className="pt-16">
         <ItineraryHeader 
-          itinerary={mockItinerary}
+          itinerary={itinerary!}
           onShare={handleShare}
         />
 
@@ -76,7 +166,7 @@ export const ItineraryDetailPage = () => {
             {/* Pins List */}
             <div className="lg:col-span-2 space-y-4">
               <h2 className="text-xl font-semibold mb-6">Itinerary Stops</h2>
-              {mockItinerary.pins.map((pin, index) => (
+              {itinerary!.pins.map((pin, index) => (
                 <PinCard 
                   key={pin.id}
                   pin={pin}
@@ -88,7 +178,7 @@ export const ItineraryDetailPage = () => {
             {/* Comments Section */}
             <div className="lg:col-span-1">
               <CommentSection 
-                comments={mockItinerary.comments}
+                comments={itinerary!.comments}
                 onAddComment={handleAddComment}
               />
             </div>

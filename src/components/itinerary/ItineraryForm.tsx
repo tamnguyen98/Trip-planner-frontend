@@ -6,6 +6,19 @@ interface Props {
   itinerary: Partial<Itinerary>;
   onChange: (itinerary: Partial<Itinerary>) => void;
 }
+export const formatDateToMMDDYYYY = (date: Date | string | undefined): string => {
+  if (!date) return ''; // Handle null or undefined input
+
+  const d = typeof date === 'string' ? new Date(date) : date; // Ensure it's a Date object
+
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+  const day = String(d.getDate()).padStart(2, '0');
+  const year = d.getFullYear();
+
+  return `${year}-${month}-${day}`;
+};
+
+
 
 export const ItineraryForm = ({ itinerary, onChange }: Props) => {
   return (
@@ -72,8 +85,8 @@ export const ItineraryForm = ({ itinerary, onChange }: Props) => {
             <label className="block text-sm font-medium text-gray-700">Start Date</label>
             <input
               type="date"
-              value={itinerary.startDate || ''}
-              onChange={(e) => onChange({ ...itinerary, startDate: e.target.value })}
+              value={formatDateToMMDDYYYY(itinerary.startDate) || ''}
+              onChange={(e) => onChange({ ...itinerary, startDate: new Date(e.target.value) })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
@@ -81,8 +94,8 @@ export const ItineraryForm = ({ itinerary, onChange }: Props) => {
             <label className="block text-sm font-medium text-gray-700">End Date</label>
             <input
               type="date"
-              value={itinerary.endDate || ''}
-              onChange={(e) => onChange({ ...itinerary, endDate: e.target.value })}
+              value={formatDateToMMDDYYYY(itinerary.endDate) || ''}
+              onChange={(e) => onChange({ ...itinerary, endDate: new Date(e.target.value) })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
