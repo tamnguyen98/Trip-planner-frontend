@@ -17,7 +17,6 @@ export const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isLoggedIn={true} />
       
       {/* Search Section */}
       <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-500 to-purple-600">

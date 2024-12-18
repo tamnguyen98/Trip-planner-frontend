@@ -42,9 +42,7 @@ export default function App() {
               </ProtectedRoute>
             } />
             <Route path="/itinerary/:id" element={
-              <ProtectedRoute>
                 <ItineraryDetailPage />
-              </ProtectedRoute>
             } />
             <Route path="/itinerary/:id/edit" element={
               <ProtectedRoute>

@@ -110,7 +110,6 @@ export const ItineraryDetailPage = () => {
   if (loading || apiLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header isLoggedIn={true} />
         <div className="pt-16 flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -125,7 +124,6 @@ export const ItineraryDetailPage = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header isLoggedIn={true} />
         <div className="pt-16 flex items-center justify-center min-h-screen">
           <div className="text-center text-red-600">
             <p className="text-xl">Error loading itinerary</p>
@@ -140,7 +138,6 @@ export const ItineraryDetailPage = () => {
   if (!itinerary && !loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header isLoggedIn={true} />
         <div className="pt-16 flex items-center justify-center min-h-screen">
           <div className="text-center text-gray-600">
             <p className="text-xl">Itinerary not found</p>
@@ -153,7 +150,6 @@ export const ItineraryDetailPage = () => {
   // Show itinerary content when data is available
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isLoggedIn={true} />
       
       <div className="pt-16">
         <ItineraryHeader 

@@ -16,7 +16,6 @@ export const SearchResultsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isLoggedIn={true} />
       
       {/* Search Bar Section */}
       <div className="sticky top-0 z-40 bg-white shadow-sm">
