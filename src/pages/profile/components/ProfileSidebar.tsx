@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   User, 
   Settings, 
@@ -10,6 +10,7 @@ import {
   Bookmark,
   Share2
 } from 'lucide-react';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const navigation = [
   { name: 'Personal Info', href: '/profile', icon: User, exact: true },
@@ -22,9 +23,17 @@ const navigation = [
 ];
 
 export const ProfileSidebar = () => {
-  const handleLogout = () => {
-    // TODO: Implement logout logic
-    console.log('Logging out...');
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Optionally show an error message to the user
+    }
   };
 
   return (
