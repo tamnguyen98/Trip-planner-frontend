@@ -40,23 +40,28 @@ export const Header = () => {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Plane className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-blue-600">TravelGuide</span>
+            <span className="text-xl font-bold text-blue-600">PlanPals</span>
           </Link>
-          
+
           <div className="hidden md:flex items-center space-x-6">
             {user ? (
               <>
-                <Link to="/create" className="text-gray-700 hover:text-blue-600">Create Itinerary</Link>
-                <Link to="/explore" className="text-gray-700 hover:text-blue-600">Explore</Link>
+                <button
+                  onClick={() => navigate('/itinerary/new')}
+                  className="text-gray-700 hover:text-blue-600"
+                >
+                  Create Itinerary
+                </button>
+                <Link to="/home" className="text-gray-700 hover:text-blue-600">Home</Link>
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={toggleMenu}
                     className="p-2 rounded-full hover:bg-gray-100"
                   >
                     {user.photoURL ? (
-                      <img 
-                        src={user.photoURL} 
-                        alt={user.displayName || 'Profile'} 
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName || 'Profile'}
                         className="h-8 w-8 rounded-full"
                       />
                     ) : (
@@ -94,7 +99,7 @@ export const Header = () => {
               </>
             )}
           </div>
-          
+
           <button className="md:hidden p-2 rounded-md hover:bg-gray-100">
             <Menu className="h-6 w-6" />
           </button>

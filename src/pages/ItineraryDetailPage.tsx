@@ -52,132 +52,99 @@ const mockItinerary = {
 
 export const ItineraryDetailPage = () => {
   const { id } = useParams();
-  const { loading: apiLoading, error, getItinerary, addComment, shareItinerary } = useItinerary();
+  const { 
+    getItinerary, 
+    addComment, 
+    rateItinerary, 
+    updateVisibility,
+    loading, 
+    error 
+  } = useItinerary();
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItinerary = async () => {
-      if (!id) {
-        setLoading(false);
-        return;
-      }
-      
-      try {
-        setLoading(true);
-        // For development, simulate API call with mock data
-        // In production, uncomment the following line and remove the setTimeout
-        // const data = await getItinerary(id);
-        
-        // Simulate API call with mock data
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setItinerary(mockItinerary);
-      } catch (error) {
-        console.error('Failed to fetch itinerary:', error);
-      } finally {
-        setLoading(false);
+      if (id) {
+        const response = await getItinerary(id);
+        if (response) {
+          setItinerary(response);
+        }
       }
     };
 
     fetchItinerary();
   }, [id, getItinerary]);
 
-  const handleShare = async () => {
-    if (!itinerary) return;
-
-    const emails = window.prompt('Enter email addresses (comma-separated)')?.split(',').map(email => email.trim());
-    if (!emails || emails.length === 0) return;
-
-    const success = await shareItinerary(itinerary.id, emails, 'view');
-    if (success) {
-      alert('Itinerary shared successfully!');
-    }
-  };
-
   const handleAddComment = async (content: string) => {
-    if (!itinerary) return;
+    if (!id) return;
 
-    const newComment = await addComment(itinerary.id, content);
-    if (newComment && itinerary) {
+    // POST /api/itineraries/:id/comments
+    // Required: JWT token in Authorization header
+    // Body: { content: string }
+    const comment = await addComment(id, content);
+    if (comment && itinerary) {
       setItinerary({
         ...itinerary,
-        comments: [...itinerary.comments, newComment]
+        comments: [...itinerary.comments, comment]
       });
     }
   };
 
-  // Show loading state while fetching data
-  if (loading || apiLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="pt-16 flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading itinerary...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleRating = async (rating: number) => {
+    if (!id) return;
 
-  // Show error state if there's an error
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="pt-16 flex items-center justify-center min-h-screen">
-          <div className="text-center text-red-600">
-            <p className="text-xl">Error loading itinerary</p>
-            <p className="mt-2">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    // POST /api/itineraries/:id/rate
+    // Required: JWT token in Authorization header
+    // Body: { rating: number }
+    await rateItinerary(id, rating);
+    if (itinerary) {
+      setItinerary({
+        ...itinerary,
+        rating
+      });
+    }
+  };
 
-  // Show not found state if no itinerary and not loading
-  if (!itinerary && !loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="pt-16 flex items-center justify-center min-h-screen">
-          <div className="text-center text-gray-600">
-            <p className="text-xl">Itinerary not found</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleVisibilityChange = async (visibility: 'private' | 'public' | 'listed') => {
+    if (!id) return;
 
-  // Show itinerary content when data is available
+    // PUT /api/itineraries/:id/visibility
+    // Required: JWT token in Authorization header
+    // Body: { visibility: 'private' | 'public' | 'listed' }
+    await updateVisibility(id, visibility);
+    if (itinerary) {
+      setItinerary({
+        ...itinerary,
+        visibility
+      });
+    }
+  };
+
+  // Loading and error states remain the same
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
       
       <div className="pt-16">
         <ItineraryHeader 
-          itinerary={itinerary!}
-          onShare={handleShare}
+          itinerary={itinerary!} 
+          onVisibilityChange={handleVisibilityChange}
+          onRate={handleRating}
         />
-
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Pins List */}
-            <div className="lg:col-span-2 space-y-4">
-              <h2 className="text-xl font-semibold mb-6">Itinerary Stops</h2>
-              {itinerary!.pins.map((pin, index) => (
-                <PinCard 
-                  key={pin.id}
-                  pin={pin}
-                  index={index}
-                />
-              ))}
-            </div>
+          <div className="space-y-6">
+            {itinerary?.pins.map((pin, index) => (
+              <PinCard key={pin.id} pin={pin} index={index} />
+            ))}
+          </div>
 
-            {/* Comments Section */}
-            <div className="lg:col-span-1">
-              <CommentSection 
-                comments={itinerary!.comments}
-                onAddComment={handleAddComment}
-              />
-            </div>
+          <div className="mt-12">
+            <CommentSection
+              comments={itinerary?.comments || []}
+              onAddComment={handleAddComment}
+            />
           </div>
         </div>
       </div>

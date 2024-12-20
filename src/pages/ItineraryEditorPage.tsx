@@ -1,14 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { ItineraryForm } from '../components/itinerary/ItineraryForm';
 import { PinsList } from '../components/itinerary/PinsList';
+import { useItinerary } from '../hooks/useItinerary';
 import type { Itinerary, Pin } from '../types';
+import type { CreateItineraryDTO } from '../services/api/types';
 
 export const ItineraryEditorPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
+  const { getItinerary, createItinerary, updateItinerary, deleteItinerary, loading, error } = useItinerary();
 
   const [itinerary, setItinerary] = useState<Partial<Itinerary>>({
     title: '',
@@ -19,53 +22,78 @@ export const ItineraryEditorPage = () => {
     travelType: 'air'
   });
 
+  useEffect(() => {
+    const fetchItinerary = async () => {
+      if (id) {
+        const response = await getItinerary(id);
+        if (response) {
+          setItinerary(response);
+        }
+      }
+    };
+
+    fetchItinerary();
+  }, [id, getItinerary]);
+
   const handlePinsChange = useCallback((pins: Pin[]) => {
     setItinerary(prev => ({ ...prev, pins }));
   }, []);
 
-  const handleSave = async () => {
-    // try {
-    //   const url = isEditMode 
-    //     ? `http://localhost:3000/api/itineraries/${id}`
-    //     : 'http://localhost:3000/api/itineraries';
-      
-    //   const response = await fetch(url, {
-    //     method: isEditMode ? 'PUT' : 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(itinerary)
-    //   });
-      
-    //   if (response.ok) {
-    //     navigate('/home');
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to save itinerary:', error);
-    // }
+  const validateItinerary = (data: Partial<Itinerary>): data is CreateItineraryDTO => {
+    return !!(
+      data.title &&
+      data.fromLocation?.city &&
+      data.fromLocation?.country &&
+      data.toLocation?.city &&
+      data.toLocation?.country &&
+      data.visibility &&
+      data.travelType &&
+      Array.isArray(data.pins)
+    );
+  };
 
-    // debug
-    console.log(itinerary);
+  const handleSave = async () => {
+    try {
+      if (!validateItinerary(itinerary)) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      if (isEditMode && id) {
+        await updateItinerary({ ...itinerary, id });
+      } else {
+        await createItinerary(itinerary);
+      }
+      navigate('/home');
+    } catch (error) {
+      console.error('Failed to save itinerary:', error);
+      // Here you might want to show an error message to the user
+    }
   };
 
   const handleDelete = async () => {
-    if (!isEditMode || !window.confirm('Are you sure you want to delete this itinerary?')) {
+    if (!isEditMode || !id || !window.confirm('Are you sure you want to delete this itinerary?')) {
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/itineraries/${id}`, {
-        method: 'DELETE'
-      });
-      
-      if (response.ok) {
-        navigate('/home');
-      }
+      await deleteItinerary(id);
+      navigate('/home');
     } catch (error) {
       console.error('Failed to delete itinerary:', error);
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
       
       <div className="pt-24 px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-7xl mx-auto">

@@ -104,6 +104,39 @@ export const useItinerary = () => {
     }
   }, []);
 
+  const rateItinerary = useCallback(async (itineraryId: string, rating: number): Promise<boolean> => {
+    try {
+      setLoading(true);
+      setError(null);
+      await itineraryService.rateItinerary(itineraryId, rating); // Pass arguments directly
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  
+
+  const updateVisibility = useCallback(async (
+    itineraryId: string,
+    visibility: 'private' | 'public' | 'listed'
+  ): Promise<boolean> => {
+    try {
+      setLoading(true);
+      setError(null);
+      await itineraryService.updateVisibility(itineraryId, visibility); // Pass arguments directly
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  
+
   return {
     loading,
     error,
@@ -113,5 +146,7 @@ export const useItinerary = () => {
     deleteItinerary,
     shareItinerary,
     addComment,
+    rateItinerary, 
+    updateVisibility,
   };
 };

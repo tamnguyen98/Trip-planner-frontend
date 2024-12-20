@@ -16,9 +16,10 @@ export const SearchResultsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
+      <Header />
+
       {/* Search Bar Section */}
-      <div className="sticky top-0 z-40 bg-white shadow-sm">
+      <div className="sticky top-0 z-40 bg-white shadow-sm"  style={{ paddingTop: '64px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <SearchBar />
         </div>
